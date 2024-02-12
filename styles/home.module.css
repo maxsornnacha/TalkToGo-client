@@ -1,0 +1,57 @@
+.world{
+    background-image: url('../public/earth-74015.jpg');
+     box-shadow:  0px 0px 20px white,
+     inset -50px 0px 20px rgb(0, 0, 0); 
+     background-size: 1000px 100% ;
+    border-radius: 50%; 
+    height: 60vh;
+    width: 40vw;
+    animation-name: rotate;
+    animation-duration: 10s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+@media (max-width:767px) {
+    .world{
+        height: 90vh;
+        width: 80vw;
+    }
+}
+
+@keyframes rotate {
+    0%{
+       background-position-x: 0px;
+    }
+    100%{
+        background-position-x: 1000px;
+    }
+}
+
+.line{
+    background-color: rgb(255, 255, 255);
+    height: 5vh;
+    width: 0.2vw;
+    color: black !important;
+    animation: line;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+    background-size: 1000px 90%;
+    margin-right: 0.8rem;
+
+}
+
+@keyframes line {
+    0%{
+        height: 0vh;
+    }
+    100%{
+        height: 5vh;
+    }
+
+
+}
+
