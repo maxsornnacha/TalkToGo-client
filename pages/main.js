@@ -6,6 +6,7 @@ import UserDataFetching from '@/services/UserDataFetching'
 import MenuBarOn from "@/components/Menus/MenuBarOnLeft"
 import Navbar from "@/components/Navbars/NavbarOther"
 import MenuBarOnRight from "@/components/Menus/MenuBarOnRight"
+import RoomsOnMain from "@/components/TalkingRooms/CurrentTalkingRoomsOnMain"
 
 
 export default function main(){
@@ -35,16 +36,23 @@ export default function main(){
 
     return(
     <div>
-      <div className="sticky w-full top-0 z-50">
+      <div className="sticky w-full top-0 z-50 shadow-md">
         <Navbar userData={userData} menuToggle={handleMenuToggle} menuStatus={menuToggle}/>
       </div>
      
       
     {userData?
-    <div className="grid grid-cols-12 gap-0 bg-gray-900">
+    <div className="grid grid-cols-12 gap-0 bg-gray-100">
+
+                <div className="col-span-1 w-full h-screen hidden lg:block lg:block">
+                    <div className="fixed  top-20  text-gray-100 h-screen">
+                    <div className="text-gray-700 text-center text-[0.9rem] font-bold mb-4">ห้องพูดคุย</div>
+                    <RoomsOnMain/>
+                    </div>
+                </div>
         
-                <div className="col-span-3 w-full h-screen hidden md:block lg:block">
-                    <div className="fixed  top-18 w-3/12 bg-white h-screen">
+                <div className="col-span-2 w-full h-screen hidden md:block lg:block">
+                    <div className="fixed lg:w-52 top-18  text-gray-100 h-screen">
                     <MenuBarOn  userData={userData} />
                     </div>
                 </div>

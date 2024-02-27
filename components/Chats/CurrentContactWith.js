@@ -3,7 +3,7 @@ import Image from "next/image"
 export default function FriendList(){
 
     return(
-    <div className="h-full w-full bg-gray-900 text-white">   
+    <div className="h-full w-full bg-gray-100 text-gray-700">   
 
         {/* รายชื่อเพื่อน */}
         <div className="flex flex-col gap-2">

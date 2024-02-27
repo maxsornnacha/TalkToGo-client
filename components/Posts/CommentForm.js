@@ -215,7 +215,7 @@ export default function CommentForm(props){
                         </div>
 
                         <div className="w-80 flex flex-col gap-1">
-                            <div className=" bg-gray-900 text-white p-2 rounded-md w-96 break-words">
+                            <div className=" bg-gray-100 text-black p-2 rounded-md w-96 break-words">
                             <div>{commentItem.firstname} {commentItem.lastname}</div>
                             <div className=""> {commentItem.commentInput}</div>
                             </div>
@@ -246,7 +246,7 @@ export default function CommentForm(props){
 
                                     <div>
                                     <div className="flex flex-col gap-1">
-                                    <div className="bg-gray-900 text-white rounded-md p-2 flex flex-col gap-1 w-56 break-words">
+                                    <div className="bg-gray-100 text-black rounded-md p-2 flex flex-col gap-1 w-56 break-words">
                                         <div>{item.firstname} {item.lastname}</div>
                                         <div className="">{item.replyInput}</div>
                                     </div>

@@ -153,13 +153,13 @@ useEffect(()=>{
   }
 
     return(
-    <div className="min-h-screen h-auto bg-gray-900">
-       <div className="sticky w-full top-0 z-50">
+    <div className="min-h-screen h-auto bg-gray-100">
+       <div className="sticky w-full top-0 z-50 shadow-md">
        <Navbar userData={accountLogin} menuToggle={handleMenuToggle} menuStatus={menuToggle} />
        </div>
     
     { accountLogin ?
-    <div className='grid grid-cols-12 h-full gap-3 py-3'>
+    <div className='grid grid-cols-12 h-full gap-3 py-3 lg:ms-3'>
 
             {menuToggle &&
                 <div className="lg:hidden text-black fixed w-full top-9 col-span-12 lg:col-span-6 z-20">
@@ -167,12 +167,15 @@ useEffect(()=>{
                  </div>
             }
 
-          <div className='col-span-12 md:col-span-1 lg:col-span-2'>
+          <div className='md:col-span-1 lg:col-span-12'></div>
+
+          <div className='col-span-12 hidden lg:block lg:col-span-2 lg:sticky top-20 h-screen'>
+               <MenuBarOn  userData={accountLogin} />
           </div>
 
           {/* section1 */}
           {accountData &&
-          <div className='h-screen pb-3 bg-white col-span-12 md:col-span-4  lg:col-span-3 h-2/6 md:sticky lg:sticky top-20'>
+          <div className='border-gray-200 border h-screen pb-3 bg-white col-span-12 md:col-span-4  lg:col-span-3 h-2/6 md:sticky lg:sticky top-20'>
                 <div className='flex-1'>
                 <img src={accountData.accountImage?accountData.accountImage:'/defaultProfile.png'} className=' h-56 w-full'/>
                 </div>
@@ -211,14 +214,14 @@ useEffect(()=>{
           }
 
              {/* section2 */}
-          <div className='col-span-12 md:col-span-6 lg:col-span-5'>
+          <div className='col-span-12 md:col-span-6 lg:col-span-7'>
         
           
              {/* Post Card */}
              {toggle === 'posts' && posts &&
              posts.map((item,index)=>{
               return(
-                <div className="border-yellow-200 border-2 bg-white h-auto w-auto  pt-4  grid grid-cols-12 md:rounded-md lg:rounded-md mb-4" key={item.postID}>
+                <div className="border-gray-200 border bg-white h-auto w-auto  pt-4  grid grid-cols-12 md:rounded-md lg:rounded-md mb-4" key={item.postID}>
                 <div className="col-span-12 bg-white">
                 <div className="flex gap-1">
    
@@ -266,9 +269,9 @@ useEffect(()=>{
              })
              }
 
-             {posts && posts.length< 1 &&
+             {toggle === 'posts' && posts && posts.length< 1 &&
            
-              <div className='h-screen w-full text-white flex justify-center pt-20'>
+              <div className='h-screen bg-white border-gray-200 border w-full text-black flex justify-center pt-20'>
                 <div>ยังไม่มีโพสต์</div>
               </div>
 
@@ -276,13 +279,11 @@ useEffect(()=>{
              
           </div>
 
-          <div className='col-span-12 md:col-span-1 lg:col-span-2'>
-          </div>
 
              
     </div>
      :
-     <div className='bg-gray-900 text-white h-screen flex-col text-center mt-20'>
+     <div className='bg-gray-100 text-white h-screen flex-col text-center mt-20'>
            <div>You have not signed in, please sign in ......</div>
          <div>We are redirecting you to the login page</div>
      </div>

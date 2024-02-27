@@ -7,17 +7,12 @@ export default function MenuBarOnRight(props){
 
     return(
     <>
-    <div className="h-auto w-full flex flex-col items-start ps-2 text-white rounded-sm pb-20">
+    <div className="h-auto w-full flex flex-col items-start ps-2 text-gray-700 rounded-sm pb-20">
     
    
     <div className="flex w-full p-2">
         <div  className="w-full text-start text-[0.9rem]">
-        <strong>ผู้ติดต่อล่าสุด</strong>
-
-        <div className="text-yellow-200 bg-yellow-200 text-[0.2rem] mt-2">
-         .
-        </div>
-       
+        <strong>ผู้ติดต่อล่าสุด</strong>  
         </div>
     </div>
     <div className=" flex flex-col items-start my-4 w-full">
@@ -30,10 +25,6 @@ export default function MenuBarOnRight(props){
         <div className="flex w-full p-2">
         <div  className="w-full text-start text-[0.9rem]">
             <strong>ห้องสำหรับพูดคุยล่าสุด</strong>
-
-            <div className="text-yellow-200 bg-yellow-200 text-[0.2rem] mt-2">
-                 .
-            </div>
         </div>
         </div>
         <div className=" pb-6  flex flex-col items-start my-4 w-full">
