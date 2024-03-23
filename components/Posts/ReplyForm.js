@@ -54,8 +54,8 @@ export default function Reply(props){
      
 
         Swal.fire({
-            title:`คุณต้องการที่จะตอบกลับหรือไม่`,
-            icon:'warning',
+            icon:'question',
+            text:`คุณต้องการตอบกลับหรือไม่`,
             showCancelButton:true
         }).then((status)=>{
             if(status.isConfirmed){
@@ -67,16 +67,17 @@ export default function Reply(props){
                 })
                     .then(async ()=>{
                         Swal.fire({
-                                icon: "success",
-                             title: "อัพโหลดสำเร็จ"
-                      }).then((status)=>{
-                        if(status.isConfirmed){
+                             icon: "success",
+                             title: "สำเร็จ",
+                             text: "ตอบกลับสำเร็จ",
+                             showConfirmButton: false,
+                             timer: 1500
+                      }).then(()=>{
+                 
                             setReplyInput('')
                             setReplyImage(null)
-
                             props.handleRealtime(props.index,currentDate,currentTime,accountImage,firstname,lastname,accountID,postID,commentID,replyInput,replyImage)
 
-                        }
                       })
                      })
                      .catch((error)=>{
@@ -84,7 +85,7 @@ export default function Reply(props){
                         Swal.fire({
                             icon: "error",
                             title: "เกิดข้อผิดพลาด",
-                            text: 'ไม่สามารถอัพโหลดได้ เนื่องจากเซิร์ฟเวอร์ทำงานล้มเหลว'
+                            text: error.response.data.error
                      });
                      })
             }

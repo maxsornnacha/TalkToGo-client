@@ -2,7 +2,10 @@ import Image from "next/image"
 import { useState,useEffect, useRef } from "react"
 import axios from "axios"
 import { io } from 'socket.io-client'
+import Link from "next/link"
+import { isURL } from "@/modules/modules"
 const socket = io(process.env.API_SOCKET_URL)
+import Swal from "sweetalert2"
 
 export default function ChatroomProfile({senderData,getterData,handleCloseChat}){
     const [sender,setSender] = useState(null)
@@ -87,9 +90,10 @@ export default function ChatroomProfile({senderData,getterData,handleCloseChat})
     }
 
     
-    //จัดการการ อ่านข้อความ ทั้งหมด 
-
-    const handleReadMessage= async (data)=>{
+    
+     //ต้องแยกเพราะ userData ที่ emit ไปจะเป็น คนละ getter Data
+    //จัดการการ อ่านข้อความ เมื่อส่งข้อความ แล้วอีกฝ่ายอยู่ในอยู่ในแชท
+    const handleReadMessageWhenSendingMsg= async (data)=>{
    
         axios.post(`${process.env.API_URL}/read-message`,{
             senderID:senderData.accountData._id,
@@ -101,6 +105,28 @@ export default function ChatroomProfile({senderData,getterData,handleCloseChat})
              if(roomID || data){
              socket.emit('updateMsg',{roomIDGet:roomID?roomID:data,messagesAll:response.data.messages})          
              }
+
+            //เรียกใช้งาน อัพเดตแชท ใน meesenger
+            //อัพเดตไปที่ messenger
+            axios.get(`${process.env.API_URL}/all-messages/${getterData._id}`)
+            .then((response)=>{
+                //สามารถเขียน Logic ตรงนี้เพื่อกรองหาแชทที่ไม่ได้อ่าน
+                if(response.data && getterData){
+                    const  filteredIsnotRead = (response.data).filter((chatBox,index)=>{
+    
+                        const filter = chatBox.messages.filter((message) => {
+                            return message.senderID !== getterData._id && message.isRead === false
+                        });
+    
+                        return (filter.length > 0)
+                    })
+                    socket.emit('allMessages',{data:response.data, newUnreadMessages:filteredIsnotRead.length, userID:getterData._id})
+                }
+            })
+            .catch((error)=>{
+                console.log('เกิดข้อผิดพลาดกับ server')
+                console.log(error)
+            })
         })
         .catch(()=>{
             //เกิดข้อผิดพลาดกับ server ดึงข้อมูลไม่สำเร็จ
@@ -109,12 +135,56 @@ export default function ChatroomProfile({senderData,getterData,handleCloseChat})
    
     }
 
+    //ต้องแยกเพราะ userData ที่ emit ไปจะเป็น คนละ sender Data
+    const handleReadMessageWhenJoining = ()=>{
+        axios.post(`${process.env.API_URL}/read-message`,{
+            senderID:senderData.accountData._id,
+            getterID:getterData._id,
+        })
+        .then((response)=>{
+            setMsgData(response.data.messages);
+             //ทำการส่ง message realtime ผ่าน socket โดยใช้ roomIDเป็นตัวแบ่งห้อง
+             if(roomID || data){
+             socket.emit('updateMsg',{roomIDGet:roomID?roomID:data,messagesAll:response.data.messages})          
+             }
+
+        //เรียกใช้งาน อัพเดตแชท ใน meesenger
+
+        //อัพเดตไปที่ messenger เมื่อข้อความถูกส่งเฉยๆ
+        axios.get(`${process.env.API_URL}/all-messages/${senderData.accountData._id}`)
+        .then((response)=>{
+            //สามารถเขียน Logic ตรงนี้เพื่อกรองหาแชทที่ไม่ได้อ่าน
+            if(response.data && getterData){
+                console.log(response.data)
+                const  filteredIsnotRead = (response.data).filter((chatBox,index)=>{
+
+                    const filter = chatBox.messages.filter((message) => {
+                        return message.senderID !== senderData.accountData._id && message.isRead === false
+                    });
+                  
+
+                    return (filter.length > 0)
+                })
+                socket.emit('allMessages',{data:response.data, newUnreadMessages:filteredIsnotRead.length, userID:senderData.accountData._id})
+            }
+        })
+        .catch((error)=>{
+            console.log('เกิดข้อผิดพลาดกับ server')
+            console.log(error)
+        })
+           
+        })
+        .catch(()=>{
+            //เกิดข้อผิดพลาดกับ server ดึงข้อมูลไม่สำเร็จ
+        })
+    }
+
     //อ่านเมื่อมีการส่งข้อความ แล้วฝั่ง message getter ได้อยู่ในห้องแชทอยู่
    
     //จะทำงาน เมื่ออีกฝ่ายเข้าห้อง
     useEffect(()=>{
         if(roomID){
-            handleReadMessage()
+            handleReadMessageWhenJoining()
 
            const handleUpdate = ({messagesAll})=>{
             setMsgData(messagesAll);
@@ -157,7 +227,7 @@ export default function ChatroomProfile({senderData,getterData,handleCloseChat})
               return [...prev, message];
             });
             //ทำการใช้งาน อ่านข้อความ เพื่อเช็คว่าอีกฝั่งอยู่ในแชทรึป่าว
-            await handleReadMessage(roomIDGet) 
+            await handleReadMessageWhenSendingMsg(roomIDGet) 
           };  
 
         socket.on('message', handleMessage);
@@ -190,6 +260,27 @@ export default function ChatroomProfile({senderData,getterData,handleCloseChat})
         setRoomID(null); 
         handleCloseChat(false); 
     }
+
+    const handleDoubleClickCopy=(message)=>{
+        navigator.clipboard.writeText(message)
+            .then(() => {
+                Swal.fire({
+                    icon: "success",
+                    text:"คัดลอกลิงค์สำเร็จ", 
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+            })
+            .catch((error) => {
+                Swal.fire({
+                    icon: "error",
+                    text:"คัดลอกลิงค์ไม่สำเร็จ",
+                    showConfirmButton: false,
+                    timer: 1500
+                  })
+            });
+    }
+    
     
     return(
   
@@ -198,9 +289,13 @@ export default function ChatroomProfile({senderData,getterData,handleCloseChat})
     {getter && sender &&
             <div className="flex justify-between items-center">
             <div className="pb-3 flex  p-1 ps-3 gap-2 items-center">
+                <Link href={`/profile/${getter.id}`}>
                  <img src={getter.accountImage} className="w-10 h-10 rounded-full"/>  
+                </Link>
                 <div>
+                <Link href={`/profile/${getter.id}`}>
                     <div>{getter.firstname} {getter.lastname}</div>
+                </Link>
                 </div>
             </div>
             <button className="pe-2" onClick={handleCloseChatToggle} ><img src={'/close.png'} className='w-7 h-7 bg-red-400 p-1 rounded-full'/></button>
@@ -216,21 +311,25 @@ export default function ChatroomProfile({senderData,getterData,handleCloseChat})
                 // the other person
                 <div className="flex gap-2 mt-2" key={data._id}>
                 <div className =' bg-gray-200 text-black mt-4 pt-4 bg  flex items-end'>
+                    <Link href={`/profile/${getter.id}`}>
                     <img src={getter.accountImage} className="rounded-full inline w-11 h-11 " height={30} width={30} alt="pofile's picture"/>
+                    </Link>
                 </div>
-                <div className="w-64 px-5 bg-white  text-black text-[1rem] pt-4 break-words  rounded-tl-3xl rounded-br-3xl">
-                    {data.content}
-                <div className="bg-white text-black text-end">{todayDate === convertDate?`${convertDate(data.timestamp)} -`:''} {convertTime(data.timestamp)}</div>
+                <div onDoubleClick={()=>handleDoubleClickCopy(data.content)} className="w-64 px-5 bg-white  text-black text-[1rem] pt-4 break-words  rounded-tl-3xl rounded-br-3xl">
+                    {isURL(data.content)?<a className="text-green-700" target="_blank"  href={data.content}>{data.content}</a>:data.content}
+                <div className="bg-white text-black text-end pt-3">{todayDate === convertDate?`${convertDate(data.timestamp)} -`:''} {convertTime(data.timestamp)}</div>
                 </div>
                 </div>
                 : //Me
                 <div className="flex justify-end col-span-10 bg-gray-200 mt-2" key={data._id}>
-                <div className="w-64 px-5 bg-blue-200 text-black text-[1rem] pt-4 break-words rounded-tr-3xl rounded-bl-3xl">
-                    {data.content}
-                <div className="bg-blue-200 text-black text-end">{data.isRead?'อ่านแล้ว':'ยังไม่อ่าน'} {todayDate === convertDate?`${convertDate(data.timestamp)} -`:''} {convertTime(data.timestamp)}</div>
+                <div onDoubleClick={()=>handleDoubleClickCopy(data.content)} className="w-64 px-5 bg-blue-200 text-black text-[1rem] pt-4 break-words rounded-tr-3xl rounded-bl-3xl">
+                    {isURL(data.content)?<a className="text-green-700" target="_blank"  href={data.content}>{data.content}</a>:data.content}
+                <div className="bg-blue-200 text-black text-end pt-3">{data.isRead?'อ่านแล้ว':'ยังไม่อ่าน'} {todayDate === convertDate?`${convertDate(data.timestamp)} -`:''} {convertTime(data.timestamp)}</div>
                 </div>
                 <div className =' bg-gray-200 text-black ms-2 mt-4 pt-4 bg col-span-2 flex items-end'>
+                    <Link href={`/profile/${sender.accountData.id}`}>
                     <Image src={sender.accountData.accountImage} className="rounded-full inline w-11 h-11" height={30} width={30} alt="pofile's picture"/>
+                    </Link>
                 </div>
                 </div>
                 )
@@ -247,7 +346,7 @@ export default function ChatroomProfile({senderData,getterData,handleCloseChat})
             </label>
             <input type="file" name="photoChat" id='photoChat' hidden={true}/>
             </span>
-            <button onClick={handleSendMsg} className="bg-gray-200 px-5 my-2 ms-2 text-black rounded-md">ส่ง</button>
+            <button onClick={handleSendMsg} className={`bg-gray-200 px-5 my-2 ms-2 text-black rounded-md ${inputMsg===''?'hidden':''}`}>ส่ง</button>
             </div>
     </div>
     </div>

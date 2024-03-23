@@ -9,7 +9,7 @@ export default function FriendRequest(props){
     
 
     useEffect(()=>{
-        console.log('Is socket connected?', socket.connected);
+        //console.log('Is socket connected?', socket.connected);
         socket.on(`friendRequestList`,({data,getterID})=>{
         if(getterID === props.userData.accountData._id){
             setFriendRequestData(data)
@@ -31,9 +31,13 @@ export default function FriendRequest(props){
     <div key={index}>
      <div className="bg-gray-100 border border-gray-200 m-2 p-2">
     <Link href={`/profile/${accountRequester.id}`}>
-    <div className="flex gap-1 items-center">
-        <div><img src={accountRequester.accountImage} className="w-11 h-11 rounded-full"/></div>
-        <div className="text-[0.9rem]">{accountRequester.firstname} {accountRequester.lastname}</div>
+    <div className="flex gap-2 items-center">
+        <div><img src={accountRequester.accountImage} className="w-12 h-12 rounded-full"/></div>
+        <div className="flex flex-col gap-1">
+            <div className="text-[1rem]">{accountRequester.firstname} {accountRequester.lastname}</div>
+            <div className="text-[0.8rem]">ชื่อผู้ใช้งาน: {accountRequester.username}</div>
+        </div>
+  
     </div>
     </Link>
     <div className="text-end">

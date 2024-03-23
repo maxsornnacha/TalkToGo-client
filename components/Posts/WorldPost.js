@@ -19,7 +19,7 @@ export default function WorldPost(props){
     const handleLike=(like,postID,check)=>{
        
         if(like === 1){
-            console.log('1')
+            //console.log('1')
             socket.emit('like',1,postID)
             
             socket.on('like',(like,postID)=>{
@@ -140,9 +140,9 @@ export default function WorldPost(props){
         <div className="flex flex-col w-full md:w-5/6 lg:w-5/6 gap-4">
             {/* Input form */}
             <div className=" bg-white md:border border-t border-b border-gray-200 flex h-10 w-full mt-3 mb-0  py-8 pb-20 ps-2 grid grid-cols-12 md:rounded-md lg:rounded-md">
-                <div className="col-span-11 flex">
+                <div className="col-span-11 flex flex gap-1 w-full">
                 <Link href={`/profile/${props.userData.accountData.id}`}>
-                <img className="bg-white inline rounded-full h-11 w-11 inline col-span-1" src={props.userData?props.userData.accountData.accountImage:'/defaultProfile.png'} alt="Profile picture"/>
+                <img className="bg-white inline rounded-full h-11 w-12 inline col-span-1" src={props.userData?props.userData.accountData.accountImage:'/defaultProfile.png'} alt="Profile picture"/>
                 </Link>
                 <button onClick={()=>setToggleForm(true)} className="py-2 ps-2 ms-2 w-full bg-gray-100 hover:bg-gray-200 outline-none col-span-10  rounded-md text-start text-gray-500 font-semibold text-[1rem]  overflow-x-auto scrollbar-hide">คุณคิดอะไรอยู่ มาแชร์ความคิดกัน</button>   
                 </div>  
@@ -190,7 +190,7 @@ export default function WorldPost(props){
                  </div>
  
                  <div className="text-black font-semibold bg-white flex flex-wrap border-t col-span-12 my-3 mx-3">
-                         <LikeSystem accountID={props.userData.accountData.id} postID={item.postID} handleLike={handleLike}/>
+                         <LikeSystem accountID={props.userData.accountData.id} postID={item.postID} handleLike={handleLike} post={posts[index]}/>
                          <button className="text-black font-semibold bg-white flex-1  text-[1rem] hover:text-gray-600" onClick={()=>{setToggleComment(index)}}>แสดงความคิดเห็น</button>
                  </div>
                  {toggleComment === index &&

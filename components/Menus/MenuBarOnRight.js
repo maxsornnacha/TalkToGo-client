@@ -2,8 +2,10 @@ import { useState } from "react"
 import CurrentTalkingRooms from "../Chats/CurrentContactWith"
 import CurrentContactWith from "../TalkingRooms/CurrentTalkingRooms"
 
-export default function MenuBarOnRight(props){
- 
+export default function MenuBarOnRight({userData,setCloseChatToMain}){
+    const setCloseChat =(status)=>{
+        setCloseChatToMain(status)
+    }
 
     return(
     <>
@@ -16,7 +18,7 @@ export default function MenuBarOnRight(props){
         </div>
     </div>
     <div className=" flex flex-col items-start my-4 w-full">
-        <CurrentTalkingRooms/>
+        <CurrentTalkingRooms userData={userData}/>
     </div>
 
 
@@ -28,7 +30,7 @@ export default function MenuBarOnRight(props){
         </div>
         </div>
         <div className=" pb-6  flex flex-col items-start my-4 w-full">
-        <CurrentContactWith/>
+        <CurrentContactWith userData={userData}/>
         </div>
 
 

@@ -1,54 +1,47 @@
 import Link from "next/link"
+import { useState, useEffect } from "react"
+import axios from "axios"
 
 
-export default function Rooms(){
-    return(
+export default function Rooms({userData}){
+    const [talkingrooms,setTalkingrooms] = useState(null)
+
+    useEffect(()=>{
+
+        const fetchTalkingRooms =()=>{
+            axios.post(`${process.env.API_URL}/all-talkingrooms`,{userID:userData.accountData._id})
+            .then((response)=>{
+                setTalkingrooms(response.data)
+            })
+            .catch((error)=>{
+                console.log(error.response.data)
+            })
+        }
+        
+        fetchTalkingRooms()
+        
+    },[userData])
+
+    return (
     <div className="h-96 w-full bg-gray-100 text-gray-700">
-    <div className="w-full flex flex-col items-star">
-        {/* room1 */}
-            <Link className="flex px-2  items-center gap-2  w-full py-2  hover:bg-gray-700 rounded-md hover:text-white" href='/'>
-                <img className="rounded-md h-11 w-11 bg-white shadow-md" src={'/roomPictureSample.jpg'} alt="Room picture"/>
-                <p className="text-[1.0rem]">แก๊งก๊วนกวนซ่า</p>
-            </Link>
-
-        {/* room2 */}
-        <Link className="flex px-2 items-center gap-2  w-full py-2  hover:bg-gray-700 rounded-md hover:text-white rounded-md" href='/'>
-                <img src={'/roomPictureSample.jpg'}  className="rounded-md h-11 w-11 bg-white shadow-md"  alt="Room picture"/>
-                <p className="text-[1.0rem]">ราชาเด็กเกรียน</p>
-            </Link>
-
-        {/* room3 */}
-            <Link className="flex px-2 items-center gap-2  w-full py-2  hover:bg-gray-700 rounded-md hover:text-white" href='/'>
-                <img src={'/roomPictureSample.jpg'}  className="rounded-md h-11 w-11 bg-white shadow-md"  alt="Room picture"/>
-                <p className="text-[1.0rem]">อนุบาลเด็กเปรต</p>
-            </Link>
-
-        {/* room4 */}
-            <Link className="flex px-2 items-center gap-2  w-full py-2  hover:bg-gray-700 rounded-md hover:text-white" href='/'>
-                <img src={'/roomPictureSample.jpg'}  className="rounded-md h-11 w-11 bg-white shadow-md"  alt="Room picture"/>
-                <p className="text-[1.0rem]">นักบู๋ตัวจริง</p>
-            </Link>
-
-        {/* room5 */}
-            <Link className="flex px-2 items-center gap-2  w-full py-2  hover:bg-gray-700 rounded-md hover:text-white" href='/'>
-                <img src={'/roomPictureSample.jpg'}  className="rounded-md h-11 w-11 bg-white shadow-md"  alt="Room picture"/>
-                <p className="text-[1.0rem]">God of Wars</p>
-            </Link>
-
-        {/* room6 */}
-            <Link className="flex px-2 items-center gap-2  w-full py-2  hover:bg-gray-700 rounded-md hover:text-white" href='/'>
-                <img src={'/roomPictureSample.jpg'}  className="rounded-md h-11 w-11 bg-white shadow-md"  alt="Room picture"/>
-                <p className="text-[1.0rem]">มามะ</p>
-            </Link>
-
-        {/* room7 */}
-            <Link className="flex px-2 items-center gap-2  w-full py-2  hover:bg-gray-700 rounded-md hover:text-white" href='/'>
-                <img src={'/roomPictureSample.jpg'}  className="rounded-md h-11 w-11 bg-white shadow-md"  alt="Room picture"/>
-                <p className="text-[1.0rem]">เริ่มคุยกันเถอะ</p>
-            </Link>
-
-
-    </div>
+    {talkingrooms &&
+    talkingrooms.map((room,index)=>{
+    return (
+            <div className="w-full flex flex-col items-star" key={index}>
+                    <Link className="flex px-2  items-center gap-2  w-full py-2  hover:bg-gray-700 rounded-md hover:text-white" href={`/rooms/talking-room/${room.slug}`}>
+                        <img className="rounded-md h-11 w-11 bg-white shadow-md" src={room.roomIcon?room.roomIcon:'/black-background.jpg'} alt="Room picture"/>
+                        <div>
+                        <p className="text-[1.0rem]">{room.roomName}</p>
+                        <p className="text-[0.75rem]">รายละเอียด: {room.roomDescription!==''?(room.roomDescription.length >20?room.roomDescription.slice(0,20)+'...':room.roomDescription):'ไม่มีรายละเอียด'}</p>
+                        </div>
+                    </Link>
+        
+            </div>
+    )
+    })
+    }
     </div>
     )
+
+
 }

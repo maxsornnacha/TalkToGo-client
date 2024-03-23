@@ -55,8 +55,8 @@ export default function Postform(props){
         const currentTime = `${hours}:${minutes<10?`0${minutes}`:minutes} ${AMPM}`
         
         Swal.fire({
-            title:`คุณต้องการที่จะอัพโหลดโพสต์หรือไม่`,
-            icon:'warning',
+            text:`คุณต้องการอัพโหลดโพสต์หรือไม่`,
+            icon:'question',
             showCancelButton:true
         }).then((status)=>{
             if(status.isConfirmed){
@@ -65,21 +65,21 @@ export default function Postform(props){
                     .then(async ()=>{
 
                         Swal.fire({
-                                icon: "success",
-                             title: "อัพโหลดโพสต์สำเร็จ"
-                      }).then((status)=>{
-                        if(status.isConfirmed){
+                            icon: "success",
+                            title:"สำเร็จ",
+                            text: "อัพโหลดโพสต์สำเร็จ",
+                            showConfirmButton: false,
+                            timer: 1500
+                      }).then(()=>{
                             location.reload(true)
-                            //props.toggleCancel(false)
-                        }
+     
                       })
                      })
                      .catch((error)=>{
-                        console.log(error)
                         Swal.fire({
                             icon: "error",
                             title: "เกิดข้อผิดพลาด",
-                            text: 'ไม่สามารถอัพโหลดโพสต์ได้ เนื่องจากเซิร์ฟเวอร์ทำงานล้มเหลว'
+                            text:error.response.data.error
                      });
                      })
            
@@ -87,7 +87,7 @@ export default function Postform(props){
                     Swal.fire({
                         icon: "error",
                         title: "เกิดข้อผิดพลาด",
-                       text: 'กรุณากรอกเนื้อหาก่อนโพสต์'
+                        text: 'กรุณาใส่เนื้อหาก่อนโพสต์'
                  });
                 }
             }

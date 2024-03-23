@@ -18,3 +18,23 @@ export const isEqual = (a, b) => {
   
     return true;
   }
+
+
+
+  // ทำ message ให้เป็น Link
+  export const isURL = (message) => {
+    let url
+    try {
+      url = new URL(message);
+    } catch (_) {
+      return false;  
+    }
+  
+    return url.protocol === "http:" || url.protocol === "https:";
+};
+
+//ทำการสร้าง id Room โดยการ sort Data
+export const createRoomID = (userID1, userID2) =>{
+  const sortedIDs = [userID1, userID2].sort();
+  return `${sortedIDs[0]}-${sortedIDs[1]}`;
+   }

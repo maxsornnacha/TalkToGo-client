@@ -9,8 +9,8 @@ export default function Signout(){
     const handleSignOut=(event)=>{
         event.preventDefault()
         Swal.fire({
-            title:`คุณต้องการที่จะออกจากระบบหรือไม่`,
-            icon:'warning',
+            text:`คุณต้องการออกจากระบบหรือไม่`,
+            icon:'question',
             showCancelButton:true
         })
         .then((status)=>{
@@ -22,19 +22,20 @@ export default function Signout(){
                 .then((response)=>{
                     Swal.fire({
                         icon: "success",
-                        title:response.data
+                        title:"สำเร็จ",
+                        text:response.data,
+                        showConfirmButton: false,
+                        timer: 1500
                     })
-                    .then((status)=>{
-                        if(status.isConfirmed){
+                    .then(()=>{
                             redirect.push('/')
-                        }
                     })
                 })
                 .catch((error)=>{
                     Swal.fire({
                         icon: "error",
                         title: "เกิดข้อผิดพลาด",
-                       text:error.response.data.error
+                        text:error.response.data.error
                  });
                     
                 })   

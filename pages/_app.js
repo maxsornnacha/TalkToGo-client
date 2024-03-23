@@ -1,16 +1,14 @@
 import "@/styles/globals.css";
-import Layout from "@/components/Layout";
+import { ChatToggleProvider } from "@/components/Chats/ToggleChatContext";
 
 
 
 export default function App({ Component, pageProps }) {
 
   return(
-
-
+    <ChatToggleProvider>
           <Component {...pageProps} />
-
-
+    </ChatToggleProvider>      
   )
  
 }

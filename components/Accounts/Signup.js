@@ -134,6 +134,7 @@ export default function Signup(props){
 
     //Base64 convert Image and store in the var
     const handleFileUpload=(event)=>{
+        try{
         const file = event.target.files[0]
         FileResizer.imageFileResizer(
             file, // Is the file of the image which will resized.
@@ -147,6 +148,10 @@ export default function Signup(props){
             }, // Is the callBack function of the resized new image URI.
             "base64", // Is the output type of the resized new image.
           );
+        }catch(error){
+            console.log('ไม่พบ file')
+            console.log(error)
+        }
      }
 
      const handleChangeForFirstname=(event)=>{
@@ -233,163 +238,173 @@ export default function Signup(props){
         event.preventDefault()
 
         Swal.fire({
-            title:`คุณต้องการที่จะสมัครสมาชิคหรือไม่`,
-            icon:'warning',
+            icon:'question',
+            text:`คุณต้องการสมัครสมาชิคหรือไม่`,
             showCancelButton:true
         }).then((result)=>{
             setLoading(true)
-    if(firstname.length === 0){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: "กรุณาใส่ 'ชื่อจรืง'",
-    })
-    }else if(lastname.length === 0){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: "กรุณาใส่ 'นามสกุล'",
-    })
-    }else if(username.length === 0){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: "กรุณาใส่ 'ชื่อผู้ใช้'",
-    })
-    }else if(email.length === 0){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: "กรุณาใส่ 'อีเมล'",
-    })
-    }else if(password.length === 0){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: "กรุณาใส่ 'รหัสผ่าน'",
-    })
-    }else if(passwordConfirm.length === 0){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: "กรุณาใส่ 'ยืนยันรหัสผ่าน'",
-    })
-    }else if(password !== passwordConfirm){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: "การรหัสผ่านยืนยันไม่ถูกต้อง",
-    })
-    }else if(!moreThan8){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: 'รหัสผ่านต้องมี 8 ตัวขึ้นไป',
-    })
-    }else if(!includingChar){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: 'รหัสผ่านต้องประกอบด้วยตัวอักษร',
-    })
-    }else if(!inCludingInt){
-        Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: 'รหัสผ่านต้องประกอบด้วยตัวเลข',
-    })
-    }
-    else{
         if(result.isConfirmed){
+            if(firstname.length === 0){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: "กรุณาใส่ 'ชื่อจรืง'",
+            })
+            }else if(lastname.length === 0){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: "กรุณาใส่ 'นามสกุล'",
+            })
+            }else if(username.length === 0){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: "กรุณาใส่ 'ชื่อผู้ใช้'",
+            })
+            }else if(email.length === 0){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: "กรุณาใส่ 'อีเมล'",
+            })
+            }else if(password.length === 0){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: "กรุณาใส่ 'รหัสผ่าน'",
+            })
+            }else if(passwordConfirm.length === 0){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: "กรุณาใส่ 'ยืนยันรหัสผ่าน'",
+            })
+            }else if(password !== passwordConfirm){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: "การรหัสผ่านยืนยันไม่ถูกต้อง",
+            })
+            }else if(!moreThan8){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: 'รหัสผ่านต้องมี 8 ตัวขึ้นไป',
+            })
+            }else if(!includingChar){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: 'รหัสผ่านต้องประกอบด้วยตัวอักษร',
+            })
+            }else if(!inCludingInt){
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: 'รหัสผ่านต้องประกอบด้วยตัวเลข',
+            })
+            }
+            else{
             axios.post(`${process.env.API_URL}/create-account`,{firstname,lastname,username,password,email,accountImage})
             .then((result)=>{
                 Swal.fire({
                         icon: "success",
-                     title: "สมัครสมาชิคสำเร็จ"
+                        title: "สมัครสมาชิคสำเร็จ",
+                        showConfirmButton: false,
+                        timer: 1500
               });
-              props.toggle(1)
+              props.toggle(false)
              })
-             .catch((err)=>{
-                console.log(err)
-                 Swal.fire({
-                     icon: "error",
-                     title: "เกิดข้อผิดพลาด",
-                    text: err.response.data.error.username?`มีชื่อผู้ใช้งาน '${err.response.data.error.username}' อยู่ในระบบแล้ว`
-                    :`มีอีเมล '${err.response.data.error.email}' อยู่ในระบบแล้ว`
-              });
+             .catch((error)=>{
+
+                try{
+                    Swal.fire({
+                        icon: "error",
+                        title: "เกิดข้อผิดพลาด",
+                       text: error.response.data.error.username?`มีชื่อผู้ใช้งาน '${error.response.data.error.username}' อยู่ในระบบแล้ว`
+                       :`มีอีเมล '${error.response.data.error.email}' อยู่ในระบบแล้ว`
+                 });
+                }catch(error){
+                    console.log('การสร้างบัญชีผิดพลาดเนื่องจาก :',error)
+                    Swal.fire({
+                        icon: "error",
+                        title: "เกิดข้อผิดพลาด",
+                       text:`เกิดข้อผิดพลาดกับ เซิร์ฟเวอร์`
+                 });
+                }
+                 
              }) 
             .finally(()=>setLoading(false))
+            }
          }else{
         setLoading(false)
         } 
     }
-    })
+    )
     }
 
 
     return (
     <div>
-        <div className="sign-up-cover">
+        <div className="overlay z-[100]">
                    
-            <form className="sign-form-up" onSubmit={handleCreatingAccount} > 
+            <form className="sign-form-up z-50" onSubmit={handleCreatingAccount} > 
             <div className="sign-form-up-inner">
 
-                <div className="flex  w-full">
-                 <div className=" m-2 my-5 w-4/6 text-end">
-                    <button className="p-3 bg-black text-white" disabled={true}> Sign Up</button>
-                    <button className="p-3 bg-white shadow-md text-black" onClick={handleToggle}> Sign In</button>
-                 </div>
-                 <div className="py-2 px-3 m-2 me-4 flex justify-end w-2/6" onClick={handleCancel}>
+                 <div className="pt-2 px-3 flex justify-end w-full" onClick={handleCancel}>
                     <button>
-                    <img src="/cancel.png" className="w-10 h-10"/>
+                    <img src="/close.png" className="w-4 h-4"/>
                     </button>
                  </div> 
-                 </div>
+        
 
 
-            <div className=" flex flex-col w-5/6">
+            <div className=" flex flex-col w-full p-2">
 
-                <div className="text-[2rem]  mb-5 text-center">Sign Up</div>
+                <div className="text-[2rem]  mb-2 pb-2  border-b text-center">สร้างบัญชีใหม่</div>
 
 
-                <div className=" text-black w-full flex flex-col items-center">
-                <label htmlFor="account-picture" className="cursor-pointer  text-black" >
-                    <Image src={accountImage?accountImage:'/defaultProfile.png'} htmlFor="account-picture" className="rounded-full border-gray-400 border h-36" height={150} width={150} alt="profile's Image"/>
-                   Select your profile here
+                <div className=" text-black w-full flex flex-col pb-2">
+                <label htmlFor="account-picture" className="cursor-pointer text-black flex items-center gap-2  py-2 px-2" >
+                    <img src={accountImage?accountImage:'/defaultProfile.png'} htmlFor="account-picture" className="rounded-full h-20 w-20"  alt="profile's Image"/>
+                    <span className="hover:text-gray-600">คลิ๊กเพื่อเลือกรูปโปรไฟล์ที่นี่</span>
                 </label>
                     <input type="file" id="account-picture" hidden={true} onChange={handleFileUpload}/>
                 </div>
-                
-                <div className="  mb-2 text-center flex flex-col ">
-                <label className=" text-black text-[1rem] self-start ms-1">Firstname</label>
-                <input placeholder="Firstname" className="border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded capitalize" 
+
+                <div className="w-full flex gap-2">
+                <div className="  mb-2 text-center flex flex-col w-6/12">
+                <input placeholder="ชื่อจริง" className={`border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded capitalize 
+                ${firstname !== ''?'':'border-red-500'}`}
                 type="text" value={firstname} onChange={handleChangeForFirstname}/>
                 </div>
                 
-                <div className="  mb-2 text-center flex flex-col ">
-                <label className=" text-black text-[1rem] self-start ms-1">Lastname</label>
-                <input placeholder="Lastname" className="border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded capitalize" 
+                <div className="  mb-2 text-center flex flex-col w-6/12">
+                <input placeholder="นามสกุล" className={`border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded capitalize
+                 ${lastname !== ''?'':'border-red-500'}`}
                 type="text" value={lastname} onChange={handleChangeForLastname}/>
+                </div>
                 </div>
                 
                 
                 <div className="  mb-2 text-center flex flex-col ">
-                <label className=" text-black text-[1rem] self-start ms-1">Username</label>
-                <input placeholder="Username" className="border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded" 
+                <input placeholder="ชื่อผู้ใช้" className={`border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded
+                 ${username !== ''?'':'border-red-500'}`}
                 type="text" value={username} onChange={handleChangeForUsername}/>
                 </div>
                 
 
                 <div className="  mb-2 text-center flex flex-col ">
-                <label className=" text-black text-[1rem] self-start ms-1">Email</label>
-                <input placeholder="Email" className=" border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded" 
+                <input placeholder="อีเมล" className={`border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded
+                ${email !== ''?'':'border-red-500'}`}
                 type="email" value={email} onChange={handleChangeForEmail}/>
                 </div>
                 
 
                 <div className="  mb-2 text-center flex flex-col ">
-                <label className=" text-black text-[1rem] self-start ms-1">Password</label>
-                <input placeholder="Password" className="border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded"
+                <input placeholder="รหัสผ่าน" className={`border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded
+                ${moreThan8 && includingChar && inCludingInt?'':'border-red-500'}`}
                  type="password" value={password} onChange={handleChangeForPassword}/>
                 <div className="flex  flex-wrap">
                 <p className={moreThan8?"text-[0.8rem]  text-green-500":"text-[0.8rem]  text-red-500"}>รหัสผ่านต้องมีจำนวน 8 ตัวขึ้นไป &nbsp;</p>
@@ -399,13 +414,13 @@ export default function Signup(props){
                 </div>
 
                 <div className="  mb-2 text-center flex flex-col ">
-                <label className=" text-black text-[1rem] self-start ms-1">Password Confirm</label>
-                <input placeholder="Password Confirm" className="border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded" 
+                <input placeholder="ยืนยันรหัสผ่าน" className={`border-gray-400 border bg-white text-black text-[1rem] py-2 px-2 outline-none w-full rounded
+                ${passwordConfirm !== ''?'':'border-red-500'}`}
                 type="password" value={passwordConfirm} onChange={handleChangeForPasswordConfirm}/>
                 </div>
 
            
-                    <button type="submit" className="bg-gray-900 text-white mt-3 py-4 rounded">Create Account</button>
+                    <button type="submit" className="bg-gray-800 hover:bg-gray-900 text-white mt-3 py-4 rounded font-bold text-[1.2rem]">สร้างบัญชี</button>
                 
                 
             </div>    

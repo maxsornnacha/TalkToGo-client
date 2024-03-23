@@ -4,8 +4,11 @@ import Navbar from "@/components/Navbars/NavbarOther"
 import { useState,useEffect } from "react"
 import { useRouter } from "next/router"
 import axios from "axios"
+import UserDataFetching from "@/services/UserDataFetching"
+import Notfound from "@/components/404"
 
 export default function Friends(){
+    const [userLogin,setUserLogin] = useState(null)
     const [accountData,setAccountData] = useState(null)
     const [menuToggle,setMenuToggle] = useState(false)
     const [allFriendsData,setAllFriendsData] = useState([])
@@ -14,6 +17,19 @@ export default function Friends(){
 
     const router = useRouter()
     const {id} = router.query
+
+      //fetching my account Data
+        useEffect(() => {
+          const fetchData = async () => {
+            setUserLogin(await UserDataFetching());   
+  
+          if(!(await UserDataFetching())){
+              router.push('/')
+            }
+          };
+          fetchData();
+        }, [id]);
+  
    
     const fetchData = async () => {
         await axios.get(`${process.env.API_URL}/signle-account-data/${id}`)
@@ -27,10 +43,13 @@ export default function Friends(){
     };
 
       useEffect(() => {
-        if (id) {
+        if(userLogin){
+            if (id === userLogin.accountData.id) {
             fetchData();
-          }
-        },[id]);
+        }
+        }
+      
+        },[userLogin]);
 
         const friendDataUpdate=(data)=>{
           setAllFriendsData(data)
@@ -57,9 +76,15 @@ export default function Friends(){
       const handleMenuToggle=(toggleData)=>{
         setMenuToggle(toggleData)
       }
-  
-    return(
-    <div>
+
+
+
+  if(userLogin && accountData){
+    //เช็คว่าล็อคอินรึยัง ล็อคอินตรงกันมั้ย
+    if(id === userLogin.accountData.id ){
+
+      return(
+      <div>
         <div className="sticky top-0 z-50 shadow-md">
       <Navbar userData={accountData} menuToggle={handleMenuToggle} menuStatus={menuToggle}/>
          </div>
@@ -74,7 +99,7 @@ export default function Friends(){
         }
 
         {menuToggle &&
-          <div className="lg:hidden fixed w-full top-12 col-span-12 lg:col-span-6">
+          <div className="md:hidden fixed w-full top-12 col-span-12 lg:col-span-6">
             <MenuBarOnLeft userData={accountData} />
           </div>
         }
@@ -93,5 +118,14 @@ export default function Friends(){
         </div>
 
  </div>
+    
     )
+
+    }else{
+      return <Notfound/>
+    }
+
+
+    }
+    
 }

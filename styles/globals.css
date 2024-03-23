@@ -16,22 +16,6 @@
   padding: 0px;
 }
 
-.sign-form-in{
-  position: fixed;
-  top:50%;
-  left:50%;
-  transform: translate(-50%,-50%);
-  background-color: white;
-  color: rgb(0, 0, 0);
-  padding-top: 1rem;
-  padding-bottom: 5rem;
-  border-radius: 2%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 40%;
-  height: auto;
-}
 
 .sign-form-up{
   position: fixed;
@@ -40,13 +24,11 @@
   transform: translate(-50%,-50%);
   background-color: white;
   color: rgb(0, 0, 0);
-  padding-top: 1rem;
-  padding-bottom: 1rem;
   border-radius: 2%;
   display: flex;
   flex-direction: column;
-  width: 40vw;
-  height: 100vh;
+  width: 500px;
+  height: 600px;
 }
 
 .sign-form-up-inner{
@@ -104,14 +86,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 300px; /* Adjust the initial width as needed */
+  width: 400px; /* Adjust the initial width as needed */
   height: auto;
+  max-height: 90vh;
   max-width: 400px; /* Set a maximum width for the card */
   box-shadow: -1px -1px 10px black;
+  overflow: auto;
 }
 
 .chat-card{
-  position: absolute;
+  position: fixed;
   top: 23vh;
   right: 7%; /* Adjust the right value based on your design */
   background-color: white;
@@ -125,8 +109,6 @@
   height: 700px;
   max-width: 400px; /* Set a maximum width for the card */
   box-shadow: -1px -1px 10px black;
-  z-index: 50;
-  user-select: none;
 
 }
 .chat-box-profile{
@@ -139,15 +121,45 @@
   box-sizing: border-box;
 
 }
+.creating-chatroom{
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  background-color: white;
+  color: rgb(0, 0, 0);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  height: 560px;
+}
+.invite-card{
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  background-color: white;
+  color: rgb(0, 0, 0);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  height: 300px;
+}
 
 
 
 @media (max-width:767px) {
-  .sign-form-in{
-    width: 100%;
-  }
   .sign-form-up{
     width: 100%;
+    height: 100%;
   }
   .post-form{
     width: 100%;
@@ -159,12 +171,17 @@
   }
   .navber-card{
     top: 69.2px;
+    width: 100vw;
+    height: 100vh;
   }
   .chat-card{
     width: 100vw;
-    height: 90vh;
+    height: 91vh;
     top: 69.2px;
     left: 1px;
+  }
+  .invite-card{
+    width: 100vw;
   }
 }
 
